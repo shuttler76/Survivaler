@@ -1,5 +1,7 @@
 package main;
 
+import util.Button;
+
 import java.util.ArrayList;
 
 public class GUI {

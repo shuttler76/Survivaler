@@ -16,7 +16,7 @@ public class ProgramMain {
 		} catch (LWJGLException e) {
 			e.printStackTrace();
 		}
-		PixelToy.drawing.drawString(0, 0, "");
+		PixelToy.graphics.drawString(0, 0, "");
 		Game game = new Game();
 		
 		while(true) {

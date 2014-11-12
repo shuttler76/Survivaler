@@ -2,6 +2,9 @@ package main;
 
 import java.util.ArrayList;
 
+import entity.Man;
+import entity.Shadow;
+import graphics.Drawable;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
@@ -11,34 +14,38 @@ import events.Event;
 import events.EventDispatcher;
 import events.EventType;
 import pixeltoy.PixelToy;
+import world.World;
 
 public class Game {
-	public final SpriteList spritelist;
-	public final StaticSpriteList staticSL;
-	public final Cubes worldcubes;
+	public final ArrayList<Drawable> drawables;
+	public final World world;
 	public GUI gui;
 	public Man man;
 	public Shadow shadow;
-	private final ArrayList<Update> gameObjects = new ArrayList<Update>();
+	private final ArrayList<Updatable> gameObjects = new ArrayList<Updatable>();
 	public PlayerDeath playerdeath;
 	private HUD HUD;
 	public EventDispatcher eventdispatcher;
 	public float zoom = 0.5f;
 	public Game(){
-		PixelToy.drawing.drawString(0,0,"");
-		this.staticSL= new StaticSpriteList();
+		PixelToy.graphics.drawString(0,0,"");
+
+		this.drawables= new ArrayList<Drawable>();
 		this.eventdispatcher = new EventDispatcher();
-		this.spritelist = new SpriteList();
-		this.worldcubes = new Cubes(staticSL);
-		this.man = new Man(worldcubes);
-		this.shadow = new Shadow(this.man, worldcubes);
-		gameObjects.add(shadow);
-		spritelist.add(man);
-		spritelist.add(shadow);
+		this.world = new World();
+		this.man = new Man(world);
+		this.shadow = new Shadow(this.man, world);
 		this.gui = new GUI();
 		this.playerdeath = new PlayerDeath(this);
 		this.HUD = new HUD(this);
-		
+
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
+
+        gameObjects.add(shadow);
+
+        drawables.add(man);
+        drawables.add(shadow);
+        drawables.add(world);
 	}
 	public void update(){
 		
@@ -68,8 +75,8 @@ public class Game {
 		playerdeath.update();
 		gui.update();
 		
-		for(Update update: gameObjects){
-			update.update();
+		for(Updatable updatable : gameObjects){
+			updatable.update();
 		}
 		
 		
@@ -78,8 +85,9 @@ public class Game {
 		GL11.glTranslated(Display.getWidth()/2,Display.getHeight()/2,0);
 		GL11.glScalef(zoom,zoom,1f);
 		GL11.glTranslated(-Display.getWidth()/2,-Display.getHeight()/2,0);
-		staticSL.draw();
-		spritelist.draw();
+		for (Drawable sprite : drawables) {
+            sprite.draw();
+        }
 		GL11.glPopMatrix();
 		HUD.draw();
 		gui.draw();

@@ -19,8 +19,8 @@ public class ItemStack {
 	public void draw(double x, double y){
 		item.ItemTexture().draw(x, y, itemsize, itemsize);
 		if(stacksize>1){
-			PixelToy.drawing.useColour(0, 0, 0);
-			PixelToy.drawing.drawString(x, y, String.valueOf(stacksize));
+			PixelToy.graphics.useColour(0, 0, 0);
+			PixelToy.graphics.drawString(x, y, String.valueOf(stacksize));
 		}
 	}
 	public void transfer(ItemStack to, int amount){
