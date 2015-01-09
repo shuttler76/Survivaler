@@ -1,13 +1,23 @@
 package inventory;
 
 import core.Input;
+import org.lwjgl.input.Mouse;
 import texture.Texture;
+import texture.TextureLoader;
 
 public class Slot {
 	private double x;
 	private double y;
 	private ItemStack itemstack = null;
-	private static Texture invframe = Texture.load("res/invbox.png", false, 1);
+	private static Texture invframe;
+    static {
+        try {
+            invframe = TextureLoader.loadTextureFromFile("res/invbox.png", false, 1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 	public void draw(){
 		invframe.draw(x, y, ItemStack.maxStacksize, ItemStack.maxStacksize);
 		if(itemstack != null)
@@ -45,8 +55,8 @@ public class Slot {
 		}
 	}
 	public boolean isClicked(){
-		if (Math.abs(Input.getMouseX() - x) < ItemStack.maxStacksize/2) {
-			if (Math.abs(Input.getMouseY() - y) < ItemStack.maxStacksize/2) {
+		if (Math.abs(Mouse.getX() - x) < ItemStack.maxStacksize/2) {
+			if (Math.abs(Mouse.getY() - y) < ItemStack.maxStacksize/2) {
 				return true;
 			}
 		}

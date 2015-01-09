@@ -1,12 +1,18 @@
 package inventory;
 
 import texture.Texture;
+import texture.TextureLoader;
 
 public class Wood extends Item{
-	public Wood(int size) {
-		super(size);
-	}
-	private Texture wood = Texture.load("res/wood.png", false, 1);
+	private Texture wood;
+    public Wood(){
+    	super(64);
+        try {
+            wood = TextureLoader.loadTextureFromFile("res/wood.png", false, 1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 	@Override
 	public Texture ItemTexture() {
 		return wood;

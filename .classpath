@@ -8,5 +8,6 @@
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="Pixel Toy/native"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="jar/Pixeltoy.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
