@@ -9,7 +9,7 @@ public class Slot {
 	private ItemStack itemstack = null;
 	private static Texture invframe = Texture.load("res/invbox.png", false, 1);
 	public void draw(){
-		invframe.draw(x, y, ItemStack.itemsize, ItemStack.itemsize);
+		invframe.draw(x, y, ItemStack.maxStacksize, ItemStack.maxStacksize);
 		if(itemstack != null)
 			itemstack.draw(x, y);
 	}
@@ -31,9 +31,22 @@ public class Slot {
 		with.itemstack=itemstack;
 		itemstack = temp;
 	}
+	public void split(Slot with){
+		prepareForInteraction(with);
+		itemstack.split(with.itemstack);
+	}
+	public void addTo(Slot to, int amount){
+		prepareForInteraction(to);
+		itemstack.addTo(to.itemstack, amount);
+	}
+	private void prepareForInteraction(Slot slot) {
+		if ((slot.itemstack == null)&&(itemstack != null)) {
+			slot.itemstack = new ItemStack(itemstack.getItem(), 0);
+		}
+	}
 	public boolean isClicked(){
-		if (Math.abs(Input.getMouseX() - x) < ItemStack.itemsize/2) {
-			if (Math.abs(Input.getMouseY() - y) < ItemStack.itemsize/2) {
+		if (Math.abs(Input.getMouseX() - x) < ItemStack.maxStacksize/2) {
+			if (Math.abs(Input.getMouseY() - y) < ItemStack.maxStacksize/2) {
 				return true;
 			}
 		}
@@ -51,5 +64,8 @@ public class Slot {
 	}
 	public ItemStack getItemstack() {
 		return itemstack;
+	}
+	public void clear(){
+		itemstack = null;
 	}
 }
