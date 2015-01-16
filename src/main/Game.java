@@ -3,7 +3,6 @@ package main;
 import java.util.ArrayList;
 
 import entity.Man;
-import entity.Shadow;
 import graphics.Drawable;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -21,7 +20,6 @@ public class Game {
 	public final World world;
 	public GUI gui;
 	public Man man;
-	public Shadow shadow;
 	private final ArrayList<Updatable> gameObjects = new ArrayList<Updatable>();
 	public PlayerDeath playerdeath;
 	private HUD HUD;
@@ -34,18 +32,12 @@ public class Game {
 		this.eventdispatcher = new EventDispatcher();
 		this.world = new World();
 		this.man = new Man(world);
-		this.shadow = new Shadow(this.man, world);
 		this.gui = new GUI();
 		this.playerdeath = new PlayerDeath(this);
 		this.HUD = new HUD(this);
 
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
-
-        gameObjects.add(shadow);
-
-        drawables.add(man);
-        drawables.add(shadow);
         drawables.add(world);
+        drawables.add(man);
 	}
 	public void update(){
 		
@@ -78,8 +70,7 @@ public class Game {
 		for(Updatable updatable : gameObjects){
 			updatable.update();
 		}
-		
-		
+
 		zoom+=Mouse.getDWheel()/1000f;
 		GL11.glPushMatrix();
 		GL11.glTranslated(Display.getWidth()/2,Display.getHeight()/2,0);

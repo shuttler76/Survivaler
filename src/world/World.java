@@ -18,6 +18,8 @@ public class World implements Drawable {
     private static final int cubeDeltaX = 15;
     private static final int cubeDeltaY = 7;
 
+    public static final double groundZ = 17;
+
 	public final int worldsize;
     private int vbo;
 	private boolean isWorldGenerated;
@@ -33,7 +35,7 @@ public class World implements Drawable {
     }
 
 	public World() {
-		worldsize = 64;
+		worldsize = 16;
 		buildCubeMap();
 	}
 
@@ -44,7 +46,7 @@ public class World implements Drawable {
         }
 
         SimplexNoise.randomizeSeed();
-		this.cubes = WorldGenerator.generate();
+		this.cubes = WorldGenerator.generate(worldsize);
 
         FloatBuffer data = BufferUtils.createFloatBuffer(cubes.length * cubes[0].length * 5 * 4);
 
@@ -52,15 +54,17 @@ public class World implements Drawable {
 			for(int column = 0; column < cubes[0].length; column++) {
 
                 float[] pos = convertWorldToIsometric(row, column, 0);
-                float[] uv = getTexCoordsFromCubeType(cubes[row][column]);
+                float uv = getTexCoordsFromCubeType(cubes[row][column]);
 
-                data.put(new float[]{pos[0]-16, pos[1]+16, row + column, uv[0], uv[1]});
+                System.out.println(pos[2]);
 
-                data.put(new float[]{pos[0]-16, pos[1]-16, row + column, uv[0], uv[1] - (1f / CubeType.NUMBERCUBETYPES)});
+                data.put(new float[]{pos[0]-16, pos[1]+16, pos[2], uv, 1});
 
-                data.put(new float[]{pos[0]+16, pos[1]-16, row + column, uv[0] + (1f / CubeType.NUMBERCUBETYPES), uv[1] - (1f / CubeType.NUMBERCUBETYPES)});
+                data.put(new float[]{pos[0]-16, pos[1]-16, pos[2], uv, 0});
 
-                data.put(new float[]{pos[0]+16, pos[1]+16, row + column, uv[0] + (1f / CubeType.NUMBERCUBETYPES), uv[1]});
+                data.put(new float[]{pos[0]+16, pos[1]-16, pos[2], uv + (1 / (float) CubeType.NUMBERCUBETYPES), 0});
+
+                data.put(new float[]{pos[0]+16, pos[1]+16, pos[2], uv + (1 / (float) CubeType.NUMBERCUBETYPES), 1});
 			}
 		}
 
@@ -77,17 +81,21 @@ public class World implements Drawable {
     @Override
     public void draw() {
         glEnable(GL_TEXTURE_2D);
+        glColor3f(1, 1, 1);
 
         cubesTexture.bind();
-        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbo);
 
         glEnableClientState(GL_TEXTURE_COORD_ARRAY);
         glEnableClientState(GL_VERTEX_ARRAY);
 
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbo);
+
         glVertexPointer(3, GL_FLOAT, 20, 0);
         glTexCoordPointer(2, GL_FLOAT, 20, 12);
 
-        glDrawArrays(GL_QUADS, 0, cubes.length * cubes[0].length);
+        glDrawArrays(GL_QUADS, 0, cubes.length * cubes[0].length * 4);
+
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
 
         glDisableClientState(GL_TEXTURE_COORD_ARRAY);
         glDisableClientState(GL_VERTEX_ARRAY);
@@ -95,18 +103,18 @@ public class World implements Drawable {
         glDisable(GL_TEXTURE_2D);
     }
 
-    private float[] getTexCoordsFromCubeType( int type ) {
+    private float getTexCoordsFromCubeType( int type ) {
         if (!CubeType.isCubeType(type)) {
             throw new InvalidParameterException("type parameter is not a CubeType");
         }
-        return new float[]{ (float) type / (float) CubeType.NUMBERCUBETYPES, 0};
+        return (float) type / (float) CubeType.NUMBERCUBETYPES;
     }
 
-    public double[] convertWorldToIsometric(double x, double y, double z) {
-        return new double[]{(Display.getWidth()/2)-cubeDeltaX*x+cubeDeltaX*y, Display.getHeight()/4*3.5-cubeDeltaY*x-cubeDeltaY*y+z};
+    public static double[] convertWorldToIsometric(double x, double y, double z) {
+        return new double[]{(Display.getWidth()/2)-cubeDeltaX*x+cubeDeltaX*y, Display.getHeight()/4*3.5-cubeDeltaY*x-cubeDeltaY*y+z, -x - y -z};
     }
 
-    public float[] convertWorldToIsometric(float x, float y, float z) {
-        return new float[]{(Display.getWidth()/2)-cubeDeltaX*x+cubeDeltaX*y, (float) (Display.getHeight()/4*3.5-cubeDeltaY*x-cubeDeltaY*y+z)};
+    public static float[] convertWorldToIsometric(float x, float y, float z) {
+        return new float[]{(Display.getWidth()/2)-cubeDeltaX*x+cubeDeltaX*y, (float) (Display.getHeight()/4*3.5-cubeDeltaY*x-cubeDeltaY*y+z), -x - y -z};
     }
 }

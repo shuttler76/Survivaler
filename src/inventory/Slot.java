@@ -1,6 +1,7 @@
 package inventory;
 
 import core.Input;
+import graphics.Drawer;
 import org.lwjgl.input.Mouse;
 import texture.Texture;
 import texture.TextureLoader;
@@ -19,7 +20,7 @@ public class Slot {
     }
 
 	public void draw(){
-		invframe.draw(x, y, ItemStack.itemsize, ItemStack.itemsize);
+		Drawer.drawTexture(invframe, (float)x, (float)y, -100, ItemStack.itemsize, ItemStack.itemsize);
 		if(itemstack != null)
 			itemstack.draw(x, y);
 	}

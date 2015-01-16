@@ -1,5 +1,6 @@
 package inventory;
 
+import graphics.Drawer;
 import pixeltoy.PixelToy;
 
 public class ItemStack {
@@ -17,7 +18,7 @@ public class ItemStack {
 	}
 
 	public void draw(double x, double y){
-		item.ItemTexture().draw(x, y, itemsize, itemsize);
+		Drawer.drawTexture(item.ItemTexture(), (float)x, (float)y, -100, itemsize, itemsize);
 		if(stacksize>1){
 			PixelToy.graphics.useColour(0, 0, 0);
 			PixelToy.graphics.drawString(x, y, String.valueOf(stacksize));
