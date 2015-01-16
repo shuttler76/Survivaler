@@ -4,7 +4,7 @@ import graphics.Drawer;
 import pixeltoy.PixelToy;
 
 public class ItemStack {
-	public static final int itemsize = 64;
+	public static final int maxStacksize = 64;
 	private int stacksize;
 	private Item item;
 	
@@ -21,27 +21,31 @@ public class ItemStack {
 		Drawer.drawTexture(item.ItemTexture(), (float)x, (float)y, -100, itemsize, itemsize);
 		if(stacksize>1){
 			PixelToy.graphics.useColour(0, 0, 0);
-			PixelToy.graphics.drawString(x, y, String.valueOf(stacksize));
+			PixelToy.graphics.drawString(x+8, y-28, String.valueOf(stacksize));
 		}
 	}
-	public void transfer(ItemStack to, int amount){
-		amount = stacksize < amount ? stacksize : amount;
-		addTo(-amount);
-		to.addTo(amount);
+	public void transfer(ItemStack to){
+		addTo(to, maxStacksize);
 	}
-	public void addTo(int amount){
-		stacksize += amount;
-		
-		stacksize = item.getMaxstacksize() < stacksize ? item.getMaxstacksize() : stacksize;
+
+	public void addTo(ItemStack to, int amount) {
+		int remainingspace = maxStacksize - to.stacksize;
+		int possibleTransfer = Math.min(stacksize, remainingspace);
+		amount = Math.min(possibleTransfer, amount);
+		to.stacksize+=amount;
+		stacksize-=amount;
 	}
+	
 	public void split(ItemStack with){
-		with.addTo(stacksize/2);
-		if(!(stacksize % 2 == 0)){
-			with.addTo(1);
+		if(stacksize % 2 == 1){
+			addTo(with,1);
 		}
-		stacksize/=2;
+		addTo(with,stacksize/2);
 	}
 	public int getStacksize(){
 		return stacksize;
+	}
+	public Item getItem(){
+		return item;
 	}
 }

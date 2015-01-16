@@ -5,8 +5,8 @@ import texture.TextureLoader;
 
 public class Wood extends Item{
 	private Texture wood;
-
     public Wood(){
+    	super(64);
         try {
             wood = TextureLoader.loadTextureFromFile("res/wood.png", false, 1);
         } catch (Exception e) {

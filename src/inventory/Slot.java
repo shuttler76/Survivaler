@@ -20,6 +20,7 @@ public class Slot {
     }
 
 	public void draw(){
+
 		Drawer.drawTexture(invframe, (float)x, (float)y, -100, ItemStack.itemsize, ItemStack.itemsize);
 		if(itemstack != null)
 			itemstack.draw(x, y);
@@ -42,9 +43,22 @@ public class Slot {
 		with.itemstack=itemstack;
 		itemstack = temp;
 	}
+	public void split(Slot with){
+		prepareForInteraction(with);
+		itemstack.split(with.itemstack);
+	}
+	public void addTo(Slot to, int amount){
+		prepareForInteraction(to);
+		itemstack.addTo(to.itemstack, amount);
+	}
+	private void prepareForInteraction(Slot slot) {
+		if ((slot.itemstack == null)&&(itemstack != null)) {
+			slot.itemstack = new ItemStack(itemstack.getItem(), 0);
+		}
+	}
 	public boolean isClicked(){
-		if (Math.abs(Mouse.getX() - x) < ItemStack.itemsize/2) {
-			if (Math.abs(Mouse.getY() - y) < ItemStack.itemsize/2) {
+		if (Math.abs(Mouse.getX() - x) < ItemStack.maxStacksize/2) {
+			if (Math.abs(Mouse.getY() - y) < ItemStack.maxStacksize/2) {
 				return true;
 			}
 		}
@@ -62,5 +76,8 @@ public class Slot {
 	}
 	public ItemStack getItemstack() {
 		return itemstack;
+	}
+	public void clear(){
+		itemstack = null;
 	}
 }

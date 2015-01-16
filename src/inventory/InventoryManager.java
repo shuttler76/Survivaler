@@ -19,6 +19,10 @@ public class InventoryManager implements EventHandler{
 	
 	public void update(){
 		playerslot.setPosition(Mouse.getX(), Mouse.getY());
+		if((playerslot.getItemstack() != null)&&(playerslot.getItemstack().getStacksize() <= 0)){
+			playerslot.clear();
+		}
+		playerinventory.update();
 	}
 	public void draw(){
 		playerinventory.draw();
@@ -37,7 +41,23 @@ public class InventoryManager implements EventHandler{
 			if(event.eventType == EventType.LEFT_MOUSE_RELEASED){
 				Slot selectedSlot = playerinventory.getClicked();
 				if(selectedSlot != null){
-					playerslot.exchange(selectedSlot);
+					if((selectedSlot.getItemstack() != null)&&(playerslot.getItemstack() != null)&&(selectedSlot.getItemstack().getItem() == playerslot.getItemstack().getItem())){
+						playerslot.getItemstack().transfer(selectedSlot.getItemstack());
+					}else{
+						playerslot.exchange(selectedSlot);
+					}
+				}
+			}
+			if(event.eventType == EventType.RIGHT_MOUSE_RELEASED){
+				Slot selectedSlot = playerinventory.getClicked();
+				if(selectedSlot != null){
+					if(playerslot.getItemstack() == null){
+						if(selectedSlot.getItemstack() != null){
+							selectedSlot.split(playerslot);
+						}
+					} else {
+						playerslot.addTo(selectedSlot, 1);
+					}
 				}
 			}
 	}

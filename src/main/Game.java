@@ -25,6 +25,7 @@ public class Game {
 	private HUD HUD;
 	public EventDispatcher eventdispatcher;
 	public float zoom = 0.5f;
+	private Camera camera;
 	public Game(){
 		PixelToy.graphics.drawString(0,0,"");
 
@@ -35,9 +36,15 @@ public class Game {
 		this.gui = new GUI();
 		this.playerdeath = new PlayerDeath(this);
 		this.HUD = new HUD(this);
+		this.camera = new Camera();
+		
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
 
-        drawables.add(world);
+        gameObjects.add(shadow);
+
         drawables.add(man);
+        drawables.add(shadow);
+        drawables.add(world);
 	}
 	public void update(){
 		
@@ -49,6 +56,12 @@ public class Game {
 				if (!state) 
 				{
 					eventdispatcher.dispatchEvent(new Event(EventType.LEFT_MOUSE_RELEASED));
+				}
+			}
+			if (mouse == 1) {
+				if (!state) 
+				{
+					eventdispatcher.dispatchEvent(new Event(EventType.RIGHT_MOUSE_RELEASED));
 				}
 			}
 		}
@@ -73,6 +86,8 @@ public class Game {
 
 		zoom+=Mouse.getDWheel()/1000f;
 		GL11.glPushMatrix();
+
+		camera.update(man.x,man.y);
 		GL11.glTranslated(Display.getWidth()/2,Display.getHeight()/2,0);
 		GL11.glScalef(zoom,zoom,1f);
 		GL11.glTranslated(-Display.getWidth()/2,-Display.getHeight()/2,0);
