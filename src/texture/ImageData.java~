@@ -23,10 +23,10 @@ public class ImageData {
     }
     
     public int getHeight(){
-		return height;
+		return height
 	}
 	
 	public int getWidth(){
-		return width;
+		return width
 	}
 }
