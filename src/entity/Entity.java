@@ -1,9 +1,12 @@
 package entity;
 
+import pixeltoy.PixelToy;
 import graphics.Drawable;
+import graphics.Drawer;
 import main.Updatable;
 import texture.Texture;
 import texture.TextureLoader;
+import world.CubeType;
 import world.World;
 
 public abstract class Entity implements Drawable, Updatable {
@@ -13,7 +16,7 @@ public abstract class Entity implements Drawable, Updatable {
     private static final Texture shadow = createShadowTexture();
     private static Texture createShadowTexture() {
         try {
-            return TextureLoader.loadTextureFromFile("res/shadow.png", true, 1);
+            return TextureLoader.loadTextureFromFile("res/shadow.png", true);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -27,6 +30,7 @@ public abstract class Entity implements Drawable, Updatable {
     protected boolean jump;
     protected double speed;
     public boolean isOnGround;
+    public boolean isInWater;
 
     public Entity( World world ) {
         worldObj = world;
@@ -40,8 +44,11 @@ public abstract class Entity implements Drawable, Updatable {
 
     @Override
     public void draw() {
-        if (worldObj.isCubeAt(x, y) && z > 16) {
-            //Draw shadow
+        if ((worldObj.isCubeAt(x, y) && z > 16)&&(!isInWater)) {
+        	double[] pos = World.convertWorldToIsometric(x, y, World.groundZ);
+//        	PixelToy.graphics.drawString(pos[0], pos[1], "X IS "+x);
+//        	PixelToy.graphics.drawString(pos[0]+20, pos[1]+21, "Y IS "+y);
+        	Drawer.drawTexture(shadow, pos[0], pos[1], pos[2], 31, 15);
         }
         drawEntity();
     }
@@ -57,11 +64,16 @@ public abstract class Entity implements Drawable, Updatable {
                 speed = 0;
                 z = World.groundZ;
                 jump = false;
-            }
-
+            }    
         } else {
             jump=true;
             isOnGround = false;
+        }
+        
+        if(worldObj.getCubeAt(x , y)==CubeType.WATER||worldObj.getCubeAt(x , y)==CubeType.DEEPWATER){
+        	isInWater = true;
+        } else {
+        	isInWater = false;
         }
         updateEntity();
     }

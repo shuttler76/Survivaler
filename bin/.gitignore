@@ -1,4 +1,10 @@
-/PixelToy.class
 /entity
+/events
+/graphics
 /init
+/inventory
 /main
+/PixelToy.class
+/util
+/world
+/texture

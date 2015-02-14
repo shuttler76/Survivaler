@@ -7,11 +7,17 @@ import texture.TextureLoader;
 import world.World;
 
 public class Man extends Entity {
+	private float animState;
+	private float animSpeed=1;
+	private double manSpeed=0.1;
+	private double offset=20;
+	private double cutoff=0;
+	private double manheight=32;
 	private static final Texture manTexture = createTexture();
 
 	private static Texture createTexture() {
         try {
-            return TextureLoader.loadTextureFromFile("res/spritesheet.png", true, 18);
+            return TextureLoader.loadTextureFromFile("res/spritesheet.png", true);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -21,42 +27,68 @@ public class Man extends Entity {
 	public Man(World world) {
         super(world);
         reset();
+        
 	}
 
     @Override
     protected void updateEntity() {
         if(Input.isKeyDown("s")){
-            x+=0.1;
+            x+=manSpeed;
+            y+=manSpeed;
         }
         if(Input.isKeyDown("d")){
-            y+=0.1;
+            y+=manSpeed;
+            x-=manSpeed;
         }
         if(Input.isKeyDown("w")){
-            x-=0.1;
+            x-=manSpeed;
+            y-=manSpeed;
         }
         if(Input.isKeyDown("a")){
-            y-=0.1;
+            y-=manSpeed;
+            x+=manSpeed;
+        }
+        if(Input.isKeyDown("r")){
+           manSpeed=5;
+        } else {
+        	manSpeed=0.1;
         }
         if(Input.isKeyDown("SPACE") && !jump){
-            //counter+=0.05;
             jump=true;
             speed = 5;
         }
 
-//        if (isOnGround) {
-//            setAnimateSprite(false);
-//            resetAnimationStage();
-//        }
-//        else {
-//            setAnimateSprite(true);
-//        }
+        offset = 15;
+		cutoff = 0;
+		manheight = 32;        		
+		
+        if ((isOnGround)) {
+        	if(isInWater){
+        		manheight = 16;
+        		offset = 10;
+        		cutoff = 0.5;
+//        		manSpeed=0.06;
+        		animSpeed = 0.5f;
+        		animState+=animSpeed;
+            	if(animState>18){
+            		animState=0;
+            	}
+        	} else {
+        		animState=0;
+        	}
+        } else {
+        	animSpeed = 1;
+        	animState+=animSpeed;
+        	if(animState>18){
+        		animState=0;
+        	}
+        }
     }
 
     @Override
     protected void drawEntity() {
-        double[] pos = World.convertWorldToIsometric(x, y, z+ 32);
-        System.out.println(pos[2]);
-        Drawer.drawTexture(manTexture, (float)pos[0], (float)pos[1], (float)pos[2], 32, 32, 0,0, 1f/18f, 1);
+        double[] pos = World.convertWorldToIsometric(x, y, z+offset);
+        Drawer.drawTexture(manTexture, (float)pos[0], (float)pos[1], (float)pos[2], 32, manheight, ((int)animState)/18f, cutoff, ((int)animState+1)/18f, 1);
     }
 
     public void reset(){

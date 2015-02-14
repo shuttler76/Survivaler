@@ -27,7 +27,7 @@ public class World implements Drawable {
 
     private static Texture createTexture() {
         try {
-            return TextureLoader.loadTextureFromFile("res/cubes.png", true, 1);
+            return TextureLoader.loadTextureFromFile("res/cubes.png", true);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -35,7 +35,7 @@ public class World implements Drawable {
     }
 
 	public World() {
-		worldsize = 16;
+		worldsize = 1024;
 		buildCubeMap();
 	}
 
@@ -56,8 +56,6 @@ public class World implements Drawable {
                 float[] pos = convertWorldToIsometric(row, column, 0);
                 float uv = getTexCoordsFromCubeType(cubes[row][column]);
 
-                System.out.println(pos[2]);
-
                 data.put(new float[]{pos[0]-16, pos[1]+16, pos[2], uv, 1});
 
                 data.put(new float[]{pos[0]-16, pos[1]-16, pos[2], uv, 0});
@@ -76,6 +74,13 @@ public class World implements Drawable {
 	}
 	public boolean isCubeAt(double x, double y) {
         return (x > 0) && (x < worldsize) && (y > 0) && (y < worldsize);
+	}
+	
+	public int getCubeAt(double x, double y) {
+		if(!isCubeAt(x, y)){
+			return -1;
+		}
+		return cubes[(int)(x-0.5)][(int)(y-0.5)];
 	}
 
     @Override

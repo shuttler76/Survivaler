@@ -5,6 +5,7 @@ import pixeltoy.PixelToy;
 
 public class ItemStack {
 	public static final int maxStacksize = 64;
+	public static final int itemsize=64;
 	private int stacksize;
 	private Item item;
 	
@@ -18,10 +19,10 @@ public class ItemStack {
 	}
 
 	public void draw(double x, double y){
-		Drawer.drawTexture(item.ItemTexture(), (float)x, (float)y, -100, itemsize, itemsize);
+		Drawer.drawTexture(item.ItemTexture(), x, y, 0, itemsize, itemsize);
 		if(stacksize>1){
-			PixelToy.graphics.useColour(0, 0, 0);
-			PixelToy.graphics.drawString(x+8, y-28, String.valueOf(stacksize));
+//			PixelToy.graphics.useColour(0, 0, 0);
+//			PixelToy.graphics.drawString(x+8, y-28, String.valueOf(stacksize));
 		}
 	}
 	public void transfer(ItemStack to){

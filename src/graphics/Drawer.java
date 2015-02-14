@@ -14,7 +14,20 @@ public class Drawer {
     private static int vbo;
     private static HashMap<Texture, Boolean> compiled = new HashMap<Texture, Boolean>();
 
+    public static void drawTexture( Texture texture, double x, double y, double z, double width, double height, double u, double v, double u2, double v2) {
+    	drawTexture(texture, (float)x, (float)y+5, (float)z, (float)width, (float)height, (float)u, (float)v, (float)u2, (float)v2);
+    }
+    public static void drawTexture( Texture texture, double x, double y, double z, double width, double height) {
+    	drawTexture(texture, x, y+5, z, width, height, 0, 0, 1, 1);
+    }
     public static void drawTexture( Texture texture, float x, float y, float z, float width, float height) {
+        drawTexture(texture, x, y+5, z, width, height, 0, 0, 1, 1);
+    }
+
+    public static void drawTexture( Texture texture, float x, float y, float z, float width, float height, float u, float v, float u2, float v2) {
+
+        FloatBuffer data = BufferUtils.createFloatBuffer(2);
+
         if (compiled.get(texture) == null) {
             compile();
             compiled.put(texture, true);
@@ -32,7 +45,19 @@ public class Drawer {
             glEnableClientState(GL_VERTEX_ARRAY);
 
             GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbo);
+            
+            data.put(new float[]{u, v}); data.flip();
+            GL15.glBufferSubData(GL15.GL_ARRAY_BUFFER, 8, data);
 
+            data.put(new float[]{u2, v}); data.flip();
+            GL15.glBufferSubData(GL15.GL_ARRAY_BUFFER, 24, data);
+
+            data.put(new float[]{u2, v2}); data.flip();
+            GL15.glBufferSubData(GL15.GL_ARRAY_BUFFER, 40, data);
+
+            data.put(new float[]{u, v2}); data.flip();
+            GL15.glBufferSubData(GL15.GL_ARRAY_BUFFER, 56, data);
+            
             glVertexPointer(2, GL_FLOAT, 16, 0);
             glTexCoordPointer(2, GL_FLOAT, 16, 8);
 
@@ -46,29 +71,6 @@ public class Drawer {
         glDisableClientState(GL_VERTEX_ARRAY);
 
         glDisable(GL_TEXTURE_2D);
-    }
-
-    public static void drawTexture( Texture texture, float x, float y, float z, float width, float height, float u, float v, float u2, float v2) {
-
-        FloatBuffer data = BufferUtils.createFloatBuffer(2);
-
-        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbo);
-        
-        data.put(new float[]{u, v}); data.flip();
-        GL15.glBufferSubData(GL15.GL_ARRAY_BUFFER, 8, data);
-
-        data.put(new float[]{u2, v}); data.flip();
-        GL15.glBufferSubData(GL15.GL_ARRAY_BUFFER, 24, data);
-
-        data.put(new float[]{u2, v2}); data.flip();
-        GL15.glBufferSubData(GL15.GL_ARRAY_BUFFER, 40, data);
-
-        data.put(new float[]{u, v2}); data.flip();
-        GL15.glBufferSubData(GL15.GL_ARRAY_BUFFER, 56, data);
-
-        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
-
-        drawTexture(texture, x, y, z, width, height);
     }
 
     private static void compile() {

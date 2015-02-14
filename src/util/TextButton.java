@@ -2,6 +2,7 @@ package util;
 
 import events.EventDispatcher;
 import events.EventType;
+import graphics.Drawer;
 import pixeltoy.PixelToy;
 import texture.Texture;
 import texture.TextureLoader;
@@ -27,9 +28,7 @@ public class TextButton extends Button {
 	
 	@Override
 	public void draw(){
-		buttonpic.draw(x+(width/2), y+(height/2), width, height);
-		PixelToy.graphics.useColour(0, 0, 0);
-		PixelToy.graphics.drawString(x+offsetx, y+offsety, string);
+		Drawer.drawTexture(buttonpic, x+(width/2), y+(height/2), 0, width, height);
 	}
 	public void setButtonTexture(Texture button){
 		buttonpic = button;

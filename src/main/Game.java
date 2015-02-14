@@ -27,7 +27,6 @@ public class Game {
 	public float zoom = 0.5f;
 	private Camera camera;
 	public Game(){
-		PixelToy.graphics.drawString(0,0,"");
 
 		this.drawables= new ArrayList<Drawable>();
 		this.eventdispatcher = new EventDispatcher();
@@ -38,15 +37,13 @@ public class Game {
 		this.HUD = new HUD(this);
 		this.camera = new Camera();
 		
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
+		
 
-        gameObjects.add(shadow);
-
-        drawables.add(man);
-        drawables.add(shadow);
         drawables.add(world);
+        drawables.add(man);
 	}
 	public void update(){
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		
 		while (Mouse.next()) {
 			int mouse = Mouse.getEventButton();
@@ -85,16 +82,25 @@ public class Game {
 		}
 
 		zoom+=Mouse.getDWheel()/1000f;
+		if(zoom>2){
+			zoom = 2;
+		}
+		if(zoom<0.1f){
+			zoom = 0.1f;
+		}
+		
 		GL11.glPushMatrix();
 
-		camera.update(man.x,man.y);
+		double[] manPos = world.convertWorldToIsometric(man.x, man.y, man.z);
 		GL11.glTranslated(Display.getWidth()/2,Display.getHeight()/2,0);
 		GL11.glScalef(zoom,zoom,1f);
-		GL11.glTranslated(-Display.getWidth()/2,-Display.getHeight()/2,0);
+		GL11.glTranslated(-manPos[0], -manPos[1], 0);
 		for (Drawable sprite : drawables) {
             sprite.draw();
         }
 		GL11.glPopMatrix();
+		
+		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		HUD.draw();
 		gui.draw();
 	}
