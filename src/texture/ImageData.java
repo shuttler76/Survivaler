@@ -14,8 +14,8 @@ public class ImageData {
 
     public byte[] getPixel(int x, int y){
         
-        int index = y * width + x * 4;
-        return new byte[]{ byte[index], byte[index+1], byte[index+2], byte[index+3] };
+        int index = y * data.length + x * 4;
+        return new byte[]{ data[index], data[index+1], data[index+2], data[index+3] };
     }
     
     byte[] getImageBytes(){

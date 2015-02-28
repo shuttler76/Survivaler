@@ -91,4 +91,21 @@ public class Drawer {
         GL15.glBufferData(GL15.GL_ARRAY_BUFFER, data, GL15.GL_DYNAMIC_DRAW);
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
     }
+    
+    public static void drawString(Font font, String text, double x, double y) { drawString(font, text, x, y, 12);}
+    
+    public static void drawString(Font font, String text, double x, double y, int size) {
+    	int widthsadded = 0;
+    	for (char c : text.toCharArray()) {
+    		int i = font.alphabet.indexOf(c);
+    		
+    		int [] XBounds = font.characterXBounds[i];
+    		
+    		int width = size / (XBounds[1] - XBounds[0]);
+    		
+    		drawTexture(font.glyphs, widthsadded + width /2, y = size /2, 0, width, size, XBounds[0] / font.glyphs.getWidth(), 0, XBounds[1] / font.glyphs.getWidth(),1);
+    		
+    		widthsadded += width;
+    	}
+    }
 }

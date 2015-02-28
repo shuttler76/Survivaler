@@ -8,7 +8,7 @@ public class Wood extends Item{
     public Wood(){
     	super(64);
         try {
-            wood = TextureLoader.loadTextureFromFile("res/wood.png", false, 1);
+            wood = TextureLoader.loadTextureFromFile("res/wood.png", false);
         } catch (Exception e) {
             e.printStackTrace();
         }

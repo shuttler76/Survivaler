@@ -14,6 +14,7 @@ import java.nio.IntBuffer;
 import javax.imageio.ImageIO;
 
 import org.lwjgl.BufferUtils;
+
 import static org.lwjgl.opengl.GL11.*;
 
 public class TextureLoader {	
@@ -42,7 +43,7 @@ public class TextureLoader {
             }
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, image.getWidth(), image.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, bb);
             glPopAttrib();
-            return new Texture(textureID, imageData.getWidth(), imageData.getHeight());
+            return new Texture(textureID, image.getWidth(), image.getHeight());
 
 		} else {
 			throw new Exception("No image!");
@@ -54,11 +55,11 @@ public class TextureLoader {
 		return new ImageData(getImageDataBytes(image), image.getWidth(), image.getHeight());
 	}
 	
-	public static Texture loadTextureFromImageData(ImageData imageData, boolean smooth){
+	public static Texture loadTextureFromImageData(ImageData imageData, boolean smooth) throws Exception{
 		if(imageData != null)
 		{
             IntBuffer textureReference = BufferUtils.createIntBuffer(1);
-            ByteBuffer bb = BufferUtils.createByteBuffer(imageData.length);
+            ByteBuffer bb = BufferUtils.createByteBuffer(imageData.getImageBytes().length);
             bb.put(imageData.getImageBytes()).flip();
             glGenTextures(textureReference);
             int textureID = textureReference.get(0);

@@ -8,7 +8,7 @@ public class PlayerDeath {
 	private TextButton button;
 	private boolean hasDied;
 
-	public PlayerDeath(Game game){
+	public PlayerDeath(Game game) throws Exception{
 		this.game = game;
 		this.button = new TextButton(100,50,75,20,"Restart?",EventType.RESTART,game.eventdispatcher);
 		//button.addHandlers(new RestartHandler(game.man,game.gui,button, this ,game.world));

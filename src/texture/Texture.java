@@ -15,7 +15,7 @@ public class Texture {
 	}
 	
 	public void bind(){
-		GL11.glBindTexture(id);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, id);
 	}
 	
 	public int getHeight(){

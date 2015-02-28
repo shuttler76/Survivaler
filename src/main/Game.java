@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import entity.Man;
 import graphics.Drawable;
+
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
@@ -26,7 +27,7 @@ public class Game {
 	public EventDispatcher eventdispatcher;
 	public float zoom = 0.5f;
 	private Camera camera;
-	public Game(){
+	public Game() throws Exception{
 
 		this.drawables= new ArrayList<Drawable>();
 		this.eventdispatcher = new EventDispatcher();

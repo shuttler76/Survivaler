@@ -11,9 +11,9 @@ public class HUD {
 	private Texture hudbutton;
 	private InventoryManager inventorymanager;
 
-	public HUD(Game game){
+	public HUD(Game game) throws Exception{
         try {
-            hudbutton = TextureLoader.loadTextureFromFile("res/unselectedgui.png", false, 1);
+            hudbutton = TextureLoader.loadTextureFromFile("res/unselectedgui.png", false);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -13,7 +13,7 @@ public class Slot {
 	private static Texture invframe;
     static {
         try {
-            invframe = TextureLoader.loadTextureFromFile("res/invbox.png", false, 1);
+            invframe = TextureLoader.loadTextureFromFile("res/invbox.png", false);
         } catch (Exception e) {
             e.printStackTrace();
         }
