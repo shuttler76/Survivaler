@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import entity.Man;
 import graphics.Drawable;
 
+import graphics.Font;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
@@ -19,6 +20,7 @@ import world.World;
 public class Game {
 	public final ArrayList<Drawable> drawables;
 	public final World world;
+    public static Font font;
 	public GUI gui;
 	public Man man;
 	private final ArrayList<Updatable> gameObjects = new ArrayList<Updatable>();
@@ -37,7 +39,7 @@ public class Game {
 		this.playerdeath = new PlayerDeath(this);
 		this.HUD = new HUD(this);
 		this.camera = new Camera();
-		
+		font = new Font(" abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?-+/():;%&`'*#=[]\"", "res/Resource-Imagefont.png");
 		
 
         drawables.add(world);

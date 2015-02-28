@@ -27,12 +27,12 @@ public class Font {
 					}
 					wasSepColorLastIter = true;
 				}
-				if(!(pixel[i]==seperationColor[i])){
+				else if(!(pixel[i]==seperationColor[i])){
 					if (wasSepColorLastIter){
 						characterXBounds[characterIndex][0] = x;
 					}
 					wasSepColorLastIter = false;
-					continue;
+					break;
 				}
 			}
 		}

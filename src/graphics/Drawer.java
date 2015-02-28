@@ -100,10 +100,9 @@ public class Drawer {
     		int i = font.alphabet.indexOf(c);
     		
     		int [] XBounds = font.characterXBounds[i];
+    		int width = (XBounds[1] - XBounds[0]) * size / font.glyphs.getHeight();
     		
-    		int width = size / (XBounds[1] - XBounds[0]);
-    		
-    		drawTexture(font.glyphs, widthsadded + width /2, y = size /2, 0, width, size, XBounds[0] / font.glyphs.getWidth(), 0, XBounds[1] / font.glyphs.getWidth(),1);
+    		drawTexture(font.glyphs, x + widthsadded + width /2, y + size /2, 0, width, size, ((double)XBounds[0]) / (double)font.glyphs.getWidth() + 0.000001 * size, 0, ((double)XBounds[1]) / (double)font.glyphs.getWidth(),1);
     		
     		widthsadded += width;
     	}

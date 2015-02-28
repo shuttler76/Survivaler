@@ -4,6 +4,7 @@ import events.EventDispatcher;
 import events.EventType;
 import graphics.Drawer;
 import graphics.Font;
+import main.Game;
 import pixeltoy.PixelToy;
 import texture.Texture;
 import texture.TextureLoader;
@@ -14,7 +15,7 @@ public class TextButton extends Button {
 	private Texture buttonpic;
 	private double offsety;
 	private double offsetx;
-	private Font font;
+
 
 	public TextButton(double x, double y, double width, double height,String string, EventType event, EventDispatcher eventDispatcher) throws Exception {
 		super(x, y, width, height, event, eventDispatcher);
@@ -26,13 +27,12 @@ public class TextButton extends Button {
         }
         this.offsetx = 2;
 		this.offsety = 5;
-		font = new Font(" abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?-+/():;%&`'*#=[]\"", "res/Resource-Imagefont.png");
 	}
 	
 	@Override
 	public void draw(){
 		Drawer.drawTexture(buttonpic, x+(width/2), y+(height/2), 0, width, height);
-		Drawer.drawString(font, string, x, y);
+		Drawer.drawString(Game.font, string, x + offsetx, y + offsety, 20);
 	}
 	public void setButtonTexture(Texture button){
 		buttonpic = button;

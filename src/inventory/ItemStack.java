@@ -1,6 +1,7 @@
 package inventory;
 
 import graphics.Drawer;
+import main.Game;
 import pixeltoy.PixelToy;
 
 public class ItemStack {
@@ -22,7 +23,7 @@ public class ItemStack {
 		Drawer.drawTexture(item.ItemTexture(), x, y, 0, itemsize, itemsize);
 		if(stacksize>1){
 //			PixelToy.graphics.useColour(0, 0, 0);
-//			PixelToy.graphics.drawString(x+8, y-28, String.valueOf(stacksize));
+			Drawer.drawString(Game.font,String.valueOf(stacksize),x+8, y-28, 20);
 		}
 	}
 	public void transfer(ItemStack to){
